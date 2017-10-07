@@ -55,7 +55,7 @@ class DecisionTree:
         """
         ret = []
         featVec = X[:,index]
-        X = X[:,[i for i in range(X.shape[1]) if i!=index]]
+        X = X[:,[i for i in range(X.shape[1]) if i!=index]]       #为什么要排除index特征？
         for i in range(len(featVec)):
             if featVec[i]==value:
                 ret.append(i)
@@ -86,7 +86,7 @@ class DecisionTree:
             #对第i个特征的各个value，得到各个子数据集，计算各个子数据集的熵，
             #进一步地可以计算得到根据第i个特征分割原始数据集后的熵newEntropy
             for value in uniqueVals:
-                sub_X,sub_y = self._splitDataSet(X,y,i,value)
+                sub_X,sub_y = self._splitDataSet(X,y,i,value)                #这个sub_x完全没用到呀
                 prob = len(sub_y)/float(len(y))
                 newEntropy += prob * self._calcEntropy(sub_y)  
             #计算信息增益，根据信息增益选择最佳分割特征
@@ -94,11 +94,11 @@ class DecisionTree:
             if (infoGain > bestInfoGain):
                 bestInfoGain = infoGain
                 bestFeatureIndex = i
-        return bestFeatureIndex
+        return bestFeatureIndex                                              #这里只需要返回下标即可，ide3把所有离散点都变成分枝
         
     def _chooseBestFeatureToSplit_C45(self,X,y):
         """C4.5
-            ID3算法计算的是信息增益，C4.5算法计算的是信息增益比，对上面ID3版本的函数稍作修改即可
+            ID3算法计算的是信息增益，C4.5算法计算的是信息增益比，对上面ID3版本的函数稍作修改即可    #信息增益比到底有啥区别？
         """
         numFeatures = X.shape[1]
         oldEntropy = self._calcEntropy(y)
@@ -116,7 +116,7 @@ class DecisionTree:
                 sub_X,sub_y = self._splitDataSet(X,y,i,value)
                 prob = len(sub_y)/float(len(y))
                 newEntropy += prob * self._calcEntropy(sub_y)  
-                splitInformation -= prob * np.log2(prob)
+                splitInformation -= prob * np.log2(prob)                     #区别在这里，分裂点信息，跟熵不一样，统计学方法上的有错误
             #计算信息增益比，根据信息增益比选择最佳分割特征
             #splitInformation若为0，说明该特征的所有值都是相同的，显然不能作为分割特征
             if splitInformation==0.0:
