@@ -146,7 +146,7 @@ class DecisionTree:
     
     def _createTree(self,X,y,featureIndex):
         """建立决策树
-        featureIndex，类型是元组，它记录了X中的特征在原始数据中对应的下标。
+        featureIndex，类型是元组，它记录了X中的特征在原始数据中对应的下标。                   #为什么要记录原始下标
         """
         labelList = list(y)
         #所有label都相同的话，则停止分割，返回该label
@@ -173,8 +173,8 @@ class DecisionTree:
         for value in uniqueVals:
             #对每个value递归地创建树
             sub_X,sub_y = self._splitDataSet(X,y, bestFeatIndex, value)
-            myTree[bestFeatStr][value] = self._createTree(sub_X,sub_y,featureIndex)
-        return myTree  
+            myTree[bestFeatStr][value] = self._createTree(sub_X,sub_y,featureIndex)         #可以看到这里，树每创建深度加1，就少一个特征维度
+        return myTree                                                                       #同时这里也能理解树的结构
     
     def fit(self,X,y):
         #类型检查
